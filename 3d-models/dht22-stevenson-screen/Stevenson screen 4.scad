@@ -20,7 +20,7 @@ module bottom_plate(height) {
             translate([-10, -5, 0]) cube([20, 5, 60]);
             
             difference() {
-                cylinder(h=height,r1=width-margin,r2=width-margin);
+                cylinder(h=height,r1=width-margin*2,r2=width-margin*2);
                 translate([0, 5, 0]) cylinder(h=height,r1=width/10,r2=width/10);
             }
             translate([offset, 0, height]) stick(width=stick_width, height=height);
