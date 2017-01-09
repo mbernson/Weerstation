@@ -1,17 +1,17 @@
-totalHeight = 3;
+totalHeight = 1;
 
 //Arrow
-arrowWidth = 8;
-arrowLength = 10;
+arrowWidth = 16;
+arrowLength = 12;
 
 //Base
-baseWidth = 2;
+baseWidth = 4;
 baseLength = -30;
 
 //Vane
 vaneAngle = 50;
 vaneWidth = 20;
-vaneHeight = 11;
+vaneHeight = 10;
 
 //Hole
 holeHeight = baseWidth + 1;
@@ -170,9 +170,9 @@ translate([0,20,0]) Arrow(width = arrowWidth, length = arrowLength);
 
 //Show the base with hole
 difference() {
-    translate([-1,20,0]) Base(width = baseWidth, length = baseLength);
-    translate([0,0,1.5]) Hole();
+    translate([baseWidth/-2,20,0]) Base(width = baseWidth, length = baseLength);
+    translate([0,2,totalHeight/2]) Hole();
 }
 
 //Show the vane
-translate([0,-20,0]) Vane(width = vaneWidth, angle = vaneAngle, H = vaneHeight);
+translate([0,-19,0]) Vane(width = vaneWidth, angle = vaneAngle, H = vaneHeight);
