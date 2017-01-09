@@ -1,12 +1,13 @@
-bearing_outer_diameter = 10;
-axle_diameter = 6;
+// All units are in millimeters
+bearing_outer_diameter = 19;
+axle_diameter = 6+2; // M6 = 6mm
 margin = 2; // How thick the walls should be
   
-bottom_height = 20;
-bottom_width = 20;
+bottom_height = 30;
+bottom_width = 30;
 
 houder_width = bearing_outer_diameter + margin;
-houder_height = 40;
+houder_height = 60;
 
 module cap(width) {
     height = 2;
