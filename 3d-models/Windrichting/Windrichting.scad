@@ -1,4 +1,4 @@
-totalHeight = 1;
+totalHeight = 3;
 
 //Arrow
 arrowWidth = 16;
@@ -15,8 +15,8 @@ vaneHeight = 10;
 
 //Hole
 holeHeight = baseWidth + 1;
-holeR1 = totalHeight / 4;
-holeR2 = totalHeight / 4;
+holeR1 = totalHeight / 3;
+holeR2 = totalHeight / 3;
 holeFragments = 100;
 
 module Arrow(length, width, angle, height=totalHeight, heights=undef, center=undef, centerXYZ=[true, false, false]) {
