@@ -1,8 +1,10 @@
 #include "DHT.h"
 #include <ArduinoJson.h>
 
-#define DHTPIN 6
+#define DHTPIN 13
 #define DHTTYPE DHT22
+
+#define HALLPIN 3
 
 DHT dht(DHTPIN, DHTTYPE);
 
@@ -21,14 +23,22 @@ typedef enum {
   rain
 } sensorType;
 
+volatile byte half_revolutions;
+unsigned int rpm;
+unsigned long timeold;
+
 void setup() {
   Serial.begin(9600);
 
   dht.begin();
+  
+  attachInterrupt(digitalPinToInterrupt(HALLPIN), magnet_detect, RISING);//Initialize the intterrupt pin (Arduino digital pin 3)
+  half_revolutions = 0;
+  rpm = 0;
+  timeold = 0;
 }
 
 void loop() {
-  delay(5000);
 
   jsonBuffer = StaticJsonBuffer<500>();
   JsonObject& root = jsonBuffer.createObject();  
@@ -40,6 +50,8 @@ void loop() {
 
   root.printTo(Serial);
   Serial.print("\n");
+  
+  delay(5000);
 }
 
 bool isValid(float sensorData) {
@@ -52,6 +64,10 @@ bool dht22IsValid(struct dht22result result) {
 
 struct dht22result readdht22() {
   return { dht.readHumidity(), dht.readTemperature() } ;
+}
+
+void magnet_detect() {
+  half_revolutions++;
 }
 
 JsonObject& readSensorData(sensorType type) {
@@ -78,15 +94,15 @@ JsonObject& readSensorData(sensorType type) {
       sensor["name"] = "windspeed";
       JsonObject& values = sensor.createNestedObject("values");
       
-      // TODO get sensordata
-        float result = 1.1;
-      //
-      
-      if(isValid(result)) {
+      if (half_revolutions >= 20) { 
+        rpm = 30*1000/(millis() - timeold)*half_revolutions;
+        timeold = millis();
+        half_revolutions = 0;
+
         sensor["status"] = "ok";
-        values["windspeed"] = result;
+        values["windspeed_rpm"] = rpm;
       } else {
-        sensor["status"] = "failed";
+        sensor["status"] = "waiting";
       } 
       break;
     }
