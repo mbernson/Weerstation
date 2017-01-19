@@ -1,4 +1,7 @@
-#include "DHT.h"
+#include <Adafruit_Sensor.h>
+#include <DHT.h>
+#include <DHT_U.h>
+
 #include <ArduinoJson.h>
 
 #define DHTPIN 13
@@ -26,6 +29,8 @@ typedef enum {
 volatile byte half_revolutions;
 unsigned int rpm;
 unsigned long timeold;
+
+JsonObject& readSensorData(sensorType type);
 
 void setup() {
   Serial.begin(9600);
