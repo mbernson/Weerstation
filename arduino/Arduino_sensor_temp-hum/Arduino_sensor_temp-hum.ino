@@ -9,6 +9,10 @@
 
 #define HALLPIN 3
 
+#define IRPIN_1 5
+#define IRPIN_2 6
+#define IRPIN_3 7
+
 DHT dht(DHTPIN, DHTTYPE);
 
 StaticJsonBuffer<500> jsonBuffer;
@@ -32,6 +36,8 @@ unsigned long timeold;
 
 JsonObject& readSensorData(sensorType type);
 
+int ir_bit_1, ir_bit_2, ir_bit_3;
+
 void setup() {
   Serial.begin(9600);
 
@@ -41,6 +47,15 @@ void setup() {
   half_revolutions = 0;
   rpm = 0;
   timeold = 0;
+
+  pinMode(IRPIN_1, INPUT);     
+  digitalWrite(IRPIN_1, HIGH); 
+  
+  pinMode(IRPIN_2, INPUT);     
+  digitalWrite(IRPIN_2, HIGH); 
+
+  pinMode(IRPIN_3, INPUT);     
+  digitalWrite(IRPIN_3, HIGH); 
 }
 
 void loop() {
@@ -73,6 +88,14 @@ struct dht22result readdht22() {
 
 void magnet_detect() {
   half_revolutions++;
+}
+
+int getWindDirection() {
+  ir_bit_1 = (digitalRead(IRPIN_1) == 1) ? ir_bit_1 = 1 : ir_bit_1 = 0;
+  ir_bit_2 = (digitalRead(IRPIN_2) == 1) ? ir_bit_2 = 2 : ir_bit_2 = 0;
+  ir_bit_3 = (digitalRead(IRPIN_3) == 1) ? ir_bit_3 = 4 : ir_bit_3 = 0;
+
+  return ir_bit_1 + ir_bit_2 + ir_bit_3;
 }
 
 JsonObject& readSensorData(sensorType type) {
@@ -115,10 +138,15 @@ JsonObject& readSensorData(sensorType type) {
     {
       sensor["name"] = "winddirection";
       JsonObject& values = sensor.createNestedObject("values");
-      
-      // TODO get sensordata
-        float result = 1.2;
-      //
+      /*
+      ir_bit_1 = (digitalRead(IRPIN_1) == 1) ? ir_bit_1 = 1 : ir_bit_1 = 0;
+      ir_bit_2 = (digitalRead(IRPIN_2) == 1) ? ir_bit_2 = 2 : ir_bit_2 = 0;
+      ir_bit_3 = (digitalRead(IRPIN_3) == 1) ? ir_bit_3 = 4 : ir_bit_3 = 0;
+
+      int wind_direction = ir_bit_1 + ir_bit_2 + ir_bit_3;
+      */
+
+      int result = getWindDirection();
       
       if(isValid(result)) {
         sensor["status"] = "ok";
