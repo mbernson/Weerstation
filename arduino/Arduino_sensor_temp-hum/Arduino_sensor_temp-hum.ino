@@ -187,7 +187,7 @@ JsonObject& readSensorData(sensorType type) {
       if (event.pressure) {
         sensor["status"] = "ok";
         // TODO: Formatting!
-        values["pressure"] = event.pressure;
+        values["pressure"] = event.pressure / 10;
         float temperature;
         barometer.getTemperature(&temperature);
         values["temperature"] = temperature;

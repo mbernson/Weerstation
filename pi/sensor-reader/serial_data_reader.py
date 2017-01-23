@@ -17,6 +17,11 @@ def parse_sensor_results(data):
             print("status: %s" % sensor["status"])
             # TODO: Notify the admin
         else:
+            # Exception for HpA due to bad formatting
+            if sensor["name"] == "barometer":
+                fixed_pressure = sensor["values"]["pressure"] * 10
+                sensor["values"]["pressure"] = fixed_pressure
+
             yield {
                 "measurement": sensor["name"],
                 "tags": { "location": location },
