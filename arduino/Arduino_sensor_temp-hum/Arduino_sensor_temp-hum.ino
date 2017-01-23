@@ -143,13 +143,6 @@ JsonObject& readSensorData(sensorType type) {
     {
       sensor["name"] = "winddirection";
       JsonObject& values = sensor.createNestedObject("values");
-      /*
-      ir_bit_1 = (digitalRead(IRPIN_1) == 1) ? ir_bit_1 = 1 : ir_bit_1 = 0;
-      ir_bit_2 = (digitalRead(IRPIN_2) == 1) ? ir_bit_2 = 2 : ir_bit_2 = 0;
-      ir_bit_3 = (digitalRead(IRPIN_3) == 1) ? ir_bit_3 = 4 : ir_bit_3 = 0;
-
-      int wind_direction = ir_bit_1 + ir_bit_2 + ir_bit_3;
-      */
 
       int result = getWindDirection();
       
