@@ -1,7 +1,8 @@
+#include <Wire.h>
 #include <Adafruit_Sensor.h>
+#include <Adafruit_BMP085_U.h>
 #include <DHT.h>
 #include <DHT_U.h>
-
 #include <ArduinoJson.h>
 
 #define DHTPIN 13
@@ -14,6 +15,7 @@
 #define IRPIN_3 7
 
 DHT dht(DHTPIN, DHTTYPE);
+Adafruit_BMP085_Unified barometer = Adafruit_BMP085_Unified(10085);
 
 StaticJsonBuffer<500> jsonBuffer;
 
@@ -27,7 +29,8 @@ typedef enum {
   humidity,
   windspeed,
   winddirection,
-  rain
+  rain,
+  pressure
 } sensorType;
 
 volatile byte half_revolutions;
@@ -42,6 +45,7 @@ void setup() {
   Serial.begin(9600);
 
   dht.begin();
+  barometer.begin();
   
   attachInterrupt(digitalPinToInterrupt(HALLPIN), magnet_detect, RISING);//Initialize the intterrupt pin (Arduino digital pin 3)
   half_revolutions = 0;
@@ -67,6 +71,7 @@ void loop() {
   sensors.add(readSensorData(windspeed));
   sensors.add(readSensorData(winddirection));
   sensors.add(readSensorData(rain));
+  sensors.add(readSensorData(pressure));
 
   root.printTo(Serial);
   Serial.print("\n");
@@ -171,6 +176,24 @@ JsonObject& readSensorData(sensorType type) {
       } else {
         sensor["status"] = "failed";
       } 
+      break;
+    }
+    case pressure:
+    {
+      sensor["name"] = "barometer";
+      JsonObject& values = sensor.createNestedObject("values");
+      sensors_event_t event;
+      barometer.getEvent(&event);
+      if (event.pressure) {
+        sensor["status"] = "ok";
+        // TODO: Formatting!
+        values["pressure"] = event.pressure;
+        float temperature;
+        barometer.getTemperature(&temperature);
+        values["temperature"] = temperature;
+//        float seaLevelPressure = SENSORS_PRESSURE_SEALEVELHPA;
+//        values["altitude"] = barometer.pressureToAltitude(seaLevelPressure, event.pressure); 
+      }
       break;
     }
   }
