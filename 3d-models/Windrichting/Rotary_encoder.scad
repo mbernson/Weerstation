@@ -1,7 +1,7 @@
 overall_height = 3;
 
 //Encoder
-encoder_width = 50;
+encoder_width = 100;
 
 //Center row
 center_width = 12;
