@@ -1,0 +1,5 @@
+---
+server:
+    packages: [vim, git, htop]
+    timezone: Europe/Amsterdam
+    locale: nl_NL.UTF-8

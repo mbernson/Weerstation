@@ -1,0 +1,20 @@
+---
+- hosts: all
+  become: true
+  become_user: pi
+  become_method: sudo
+  tasks:
+    - name: "Perform apt-get update"
+      apt:
+        update_cache: yes
+    - name: "Install System Packages"
+      apt: name={{ item }} state=present
+      with_items:
+        - curl
+        - wget
+        - python-software-properties
+    - name: "Install application dependencies"
+      apt: name={{ item }} state=present
+      with_items:
+        - influxdb
+        - python
