@@ -1,9 +1,10 @@
 # Weerstation.Arduino
 
 Libraries needed:
-	* ArduinoJson
-	* Adafruit Unified Sensor
-	* DHT sensor library
+* ArduinoJson
+* Adafruit Unified Sensor
+* DHT sensor library
+* Adafruit BMP085 Unified
 	
 JSON send by Arduino
 ```json
