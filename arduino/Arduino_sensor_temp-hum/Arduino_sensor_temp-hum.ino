@@ -5,14 +5,14 @@
 #include <DHT_U.h>
 #include <ArduinoJson.h>
 
-#define DHTPIN 13
+#define DHTPIN 13 //digital
 #define DHTTYPE DHT22
 
-#define HALLPIN 3
+#define HALLPIN 3 //digital
 
-#define IRPIN_1 5
-#define IRPIN_2 6
-#define IRPIN_3 7
+#define IRPIN_1 5 //digital
+#define IRPIN_2 6 //digital
+#define IRPIN_3 7 //digital
 
 DHT dht(DHTPIN, DHTTYPE);
 Adafruit_BMP085_Unified barometer = Adafruit_BMP085_Unified(10085);
