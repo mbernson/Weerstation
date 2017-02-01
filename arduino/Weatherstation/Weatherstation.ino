@@ -33,7 +33,7 @@ typedef enum {
   pressure
 } sensorType;
 
-volatile byte half_revolutions;
+volatile byte revolutions;
 unsigned int rpm;
 unsigned long timeold;
 
@@ -48,7 +48,7 @@ void setup() {
   barometer.begin();
   
   attachInterrupt(digitalPinToInterrupt(HALLPIN), magnet_detect, RISING);//Initialize the intterrupt pin (Arduino digital pin 3)
-  half_revolutions = 0;
+  revolutions = 0;
   rpm = 0;
   timeold = 0;
 
@@ -92,7 +92,7 @@ struct dht22result readdht22() {
 }
 
 void magnet_detect() {
-  half_revolutions++;
+  revolutions++;
 }
 
 int getWindDirection() {
@@ -127,10 +127,10 @@ JsonObject& readSensorData(sensorType type) {
       sensor["name"] = "windspeed";
       JsonObject& values = sensor.createNestedObject("values");
       
-      if (half_revolutions >= 20) { 
-        rpm = 30*1000/(millis() - timeold)*half_revolutions;
+      if (revolutions >= 5) { 
+        rpm = 30*1000/(millis() - timeold) * revolutions;
         timeold = millis();
-        half_revolutions = 0;
+        revolutions = 0;
 
         sensor["status"] = "ok";
         values["windspeed_rpm"] = rpm;
