@@ -29,7 +29,6 @@ typedef enum {
   humidity,
   windspeed,
   winddirection,
-  rain,
   pressure
 } sensorType;
 
@@ -70,7 +69,6 @@ void loop() {
   sensors.add(readSensorData(temperature));
   sensors.add(readSensorData(windspeed));
   sensors.add(readSensorData(winddirection));
-  sensors.add(readSensorData(rain));
   sensors.add(readSensorData(pressure));
 
   root.printTo(Serial);
@@ -154,23 +152,6 @@ JsonObject& readSensorData(sensorType type) {
       } 
       break;
     }
-    case rain:
-    {
-      sensor["name"] = "rain";
-      JsonObject& values = sensor.createNestedObject("values");
-      
-      // TODO get sensordata
-        float result = 1.3;
-      //
-      
-      if(isValid(result)) {
-        sensor["status"] = "ok";
-        values["rain"] = result;
-      } else {
-        sensor["status"] = "failed";
-      } 
-      break;
-    }
     case pressure:
     {
       sensor["name"] = "barometer";
@@ -179,13 +160,10 @@ JsonObject& readSensorData(sensorType type) {
       barometer.getEvent(&event);
       if (event.pressure) {
         sensor["status"] = "ok";
-        // TODO: Formatting!
         values["pressure"] = event.pressure / 10;
         float temperature;
         barometer.getTemperature(&temperature);
         values["temperature"] = temperature;
-//        float seaLevelPressure = SENSORS_PRESSURE_SEALEVELHPA;
-//        values["altitude"] = barometer.pressureToAltitude(seaLevelPressure, event.pressure); 
       }
       break;
     }
